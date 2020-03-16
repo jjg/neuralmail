@@ -4,6 +4,7 @@ An email-based job scheduler for processing images using neural-style.
 
 ## TODO:
 
+* There may be a bug when more than one email is in the queue...
 * Externalize email config
 * Make paths configurable
 * Create dedicated email account
@@ -14,6 +15,7 @@ An email-based job scheduler for processing images using neural-style.
 * Write a better email notification
 * Genrify this whole thing so it can be used to schedule other programs
 * Include all output images in the notification email
+* Job submission feedback email (queue position???)
 
 ## Components
 

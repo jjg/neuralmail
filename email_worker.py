@@ -16,7 +16,12 @@ if not os.path.exists(f"{config['job_dir']}/job.txt"):
     result, data = mailbox.uid("search", None, "UNSEEN")
 
     if result == "OK":
-        for message_num in data[0].split():
+        # Only read one of these at a time
+        message_count = len(data[0].split())
+        # TODO: Find a way to let new submissions know the queue length
+        if message_count > 0:
+        #for message_num in data[0].split():
+            message_num = data[0].split()[0]
             typ, message_data = mailbox.uid("fetch", message_num, "(RFC822)")
             raw_message = message_data[0][1]
             email_message = email.message_from_bytes(raw_message)
@@ -48,10 +53,12 @@ if not os.path.exists(f"{config['job_dir']}/job.txt"):
             f.write(f"email:{email_address}\n")
             f.write(f"style:{job_dir}/{filenames[0]}\n")
             f.write(f"content:{job_dir}/{filenames[1]}\n")
-            f.write(f"output:{job_dir}/out.png")
+            f.write(f"output:{job_dir}/out.png\n")
             f.close()
 
             # Launch the job
             command_line = "python ./job_worker.py"
             args = shlex.split(command_line)
             subprocess.Popen(args)
+
+            # TODO: Send job begins notification email

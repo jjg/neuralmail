@@ -23,7 +23,7 @@ subprocess.run(args, cwd=config.neural_style_dir)
 
 # Email output
 message = EmailMessage()
-message['Subject'] = "Done"
+message['Subject'] = "Done!"
 message['From'] = config["email"] 
 message['To'] = email
 
