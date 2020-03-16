@@ -1,0 +1,9 @@
+config = {
+    "email":"",
+    "password":"",
+    "imap_server":"",
+    "smtp_server":"",
+    "smtp_port":"",
+    "job_dir":"",
+    "neural_style_dir":""
+}
