@@ -3,13 +3,19 @@ import shlex
 import subprocess
 import imaplib
 import email
+import syslog
 
 from config import config
 
 # Check to see if a job is running
-print(f"{config['job_dir']}/job.txt")
-if not os.path.exists(f"{config['job_dir']}/job.txt"):
+syslog.openlog(ident="neuromail")
+syslog.syslog(syslog.LOG_INFO, "Checking for new jobs.")
 
+print(f"{config['job_dir']}/job.txt")
+if os.path.exists(f"{config['job_dir']}/job.txt"):
+    syslog.syslog(syslog.LOG_WARNING, "Job in progress, exiting.")
+else :
+    syslog.syslog(syslog.LOG_INFO, "No jobs currently running.")
     # Check for new messages
     mailbox = imaplib.IMAP4_SSL(config["imap_server"])
     mailbox.login(config["email"], config["password"])
@@ -19,6 +25,7 @@ if not os.path.exists(f"{config['job_dir']}/job.txt"):
     if result == "OK":
         # Only read one of these at a time
         message_count = len(data[0].split())
+        syslog.syslog(syslog.LOG_INFO, f"{message_count} jobs in email queue")
         # TODO: Find a way to let new submissions know the queue length
         if message_count > 0:
         #for message_num in data[0].split():
@@ -30,6 +37,7 @@ if not os.path.exists(f"{config['job_dir']}/job.txt"):
             email_address = email_from[1]
             email_subject = email_message["Subject"]
 
+            syslog.syslog(syslog.LOG_INFO, f"New job from {email_from}")
             # Create a directory for the job
             # TODO: Make sure we have what we need before creating this
             # TODO: Make sure this doesn't exist before we try
@@ -58,8 +66,11 @@ if not os.path.exists(f"{config['job_dir']}/job.txt"):
             f.close()
 
             # Launch the job
+            syslog.syslog(syslog.LOG_INFO, f"Scheduling job for {email_address}")
             command_line = "/usr/bin/python3 /home/jason/neuralmail/job_worker.py"
             args = shlex.split(command_line)
             subprocess.Popen(args)
 
             # TODO: Send job begins notification email
+
+            syslog.closelog()

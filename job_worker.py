@@ -3,11 +3,16 @@ import subprocess
 import shlex
 import smtplib
 import imghdr
+import syslog
+
 from email.message import EmailMessage
 
 from config import config
 
+syslog.openlog(ident="neuromail")
+
 # Read job file
+syslog.syslog(syslog.LOG_INFO, "Loading job file.")
 f = open(f"{config['job_dir']}/job.txt", "r")
 email = f.readline().split(":")[1].rstrip()
 style = f.readline().split(":")[1].rstrip()
@@ -17,11 +22,15 @@ f.close()
 
 # Launch neural-style 
 # TODO: Externalize or otherwise make this less hard-codey
+syslog.syslog(syslog.LOG_INFO, f"Launching neural-style for {email}")
 command_line = f"/home/jason/torch/install/bin/th /home/jason/neural-style/neural_style.lua -style_image {style} -content_image {content} -output_image {output} -gpu -1"
 args = shlex.split(command_line)
 subprocess.run(args, cwd=config["neural_style_dir"])
 
+syslog.syslog(syslog.LOG_INFO, f"neural-style processing for {email} complete!")
+
 # Email output
+syslog.syslog(syslog.LOG_INFO, f"Sending job complete email to {email}")
 message = EmailMessage()
 message['Subject'] = "Done!"
 message['From'] = config["email"] 
@@ -39,4 +48,7 @@ s.send_message(message)
 s.quit()
 
 # Delete job file
+syslog.syslog(syslog.LOG_INFO, f"Job for {email} complete, cleaning-up.")
 os.remove(f"{config['job_dir']}/job.txt")
+
+syslog.closelog()
