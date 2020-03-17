@@ -19,7 +19,7 @@ f.close()
 # TODO: Externalize or otherwise make this less hard-codey
 command_line = f"/home/jason/torch/install/bin/th /home/jason/neural-style/neural_style.lua -style_image {style} -content_image {content} -output_image {output} -gpu -1"
 args = shlex.split(command_line)
-subprocess.run(args, cwd=config.neural_style_dir)
+subprocess.run(args, cwd=config["neural_style_dir"])
 
 # Email output
 message = EmailMessage()

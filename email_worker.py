@@ -7,6 +7,7 @@ import email
 from config import config
 
 # Check to see if a job is running
+print(f"{config['job_dir']}/job.txt")
 if not os.path.exists(f"{config['job_dir']}/job.txt"):
 
     # Check for new messages
@@ -57,7 +58,7 @@ if not os.path.exists(f"{config['job_dir']}/job.txt"):
             f.close()
 
             # Launch the job
-            command_line = "python ./job_worker.py"
+            command_line = "/usr/bin/python3 /home/jason/neuralmail/job_worker.py"
             args = shlex.split(command_line)
             subprocess.Popen(args)
 
