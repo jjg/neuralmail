@@ -42,3 +42,17 @@ style:/path/to/style.jpg
 content:/path/to/content.jpg
 output:/path/to/out.png
 ```
+
+# References
+
+* https://stackoverflow.com/questions/1685157/how-can-i-specify-working-directory-for-popen
+* https://github.com/jcjohnson/neural-style
+* https://docs.python.org/3/library/email.examples.html
+* https://docs.python.org/3.7/library/email.message.html
+* https://stackoverflow.com/questions/275018/how-can-i-remove-a-trailing-newline
+* https://docs.python.org/3.5/library/subprocess.html#using-the-subprocess-module
+* https://stackoverflow.com/questions/606191/convert-bytes-to-a-string
+* https://docs.python.org/3.7/library/email.parser.html#module-email.parser
+* https://docs.python.org/3.7/library/imaplib.html
+* https://github.com/jjg/preposter.us/blob/master/preposter.us.py
+
