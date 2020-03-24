@@ -62,7 +62,7 @@ else :
             f.write(f"email:{email_address}\n")
             f.write(f"style:{job_dir}/{filenames[0]}\n")
             f.write(f"content:{job_dir}/{filenames[1]}\n")
-            f.write(f"output:{job_dir}/out.png\n")
+            f.write(f"output:{job_dir}\n")
             f.close()
 
             # Launch the job

@@ -4,6 +4,7 @@ import shlex
 import smtplib
 import imghdr
 import syslog
+import glob
 
 from email.message import EmailMessage
 
@@ -23,7 +24,7 @@ f.close()
 # Launch neural-style 
 # TODO: Externalize or otherwise make this less hard-codey
 syslog.syslog(syslog.LOG_INFO, f"Launching neural-style for {email}")
-command_line = f"/home/jason/torch/install/bin/th /home/jason/neural-style/neural_style.lua -style_image {style} -content_image {content} -output_image {output} -gpu -1"
+command_line = f"/home/jason/torch/install/bin/th /home/jason/neural-style/neural_style.lua -style_image {style} -content_image {content} -output_image {output}/out.png -gpu -1"
 args = shlex.split(command_line)
 subprocess.run(args, cwd=config["neural_style_dir"])
 
@@ -36,9 +37,13 @@ message['Subject'] = "Done!"
 message['From'] = config["email"] 
 message['To'] = email
 
-with open(output, "rb") as fp:
-    output_data = fp.read()
-message.add_attachment(output_data, maintype="image", subtype=imghdr.what(None, output_data))
+attachment_filenames = glob.glob(f"{output}/*")
+attachment_filenames.sort()
+for filename in attachment_filenames:
+    syslog.syslog(syslog.LOG_INFO, f"Attaching file {filename}.")
+    with open(filename, "rb") as fp:
+        output_data = fp.read()
+    message.add_attachment(output_data, maintype="image", subtype=imghdr.what(None, output_data))
 
 s = smtplib.SMTP(f"{config['smtp_server']}:{config['smtp_port']}")
 s.ehlo()
