@@ -10,7 +10,7 @@ from email.message import EmailMessage
 
 from config import config
 
-syslog.openlog(ident="neuromail")
+syslog.openlog(ident="neuralmail")
 
 # Read job file
 syslog.syslog(syslog.LOG_INFO, "Loading job file.")

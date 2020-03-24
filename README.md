@@ -14,16 +14,17 @@ An email-based job scheduler for processing images using neural-style.
 * Keep track of processing time, etc.
 * Write a better email notification
 * Genrify this whole thing so it can be used to schedule other programs
-* Include all output images in the notification email
+* ~~Include all output images in the notification email~~
 * Job submission feedback email (queue position???)
+* Log exceptions and send failed job email notifications
 
 ## Components
 
 ### Email Queue Worker
 1. Check for running job (only one at a time for now)
-2. Check for new message
-3. Read message
-4. Check for two attached images
+2. Check for new email messages
+3. Read one email message
+4. TODO: Check for two attached images
 5. Create a directories for the job
 6. Download attached images to job directory
 7. Create a job file for the job
@@ -34,13 +35,14 @@ An email-based job scheduler for processing images using neural-style.
 2. Start neural-style
 3. Create email response and attach output images
 4. Delete job file
+5. TODO: Delete email message
 
 ### Job File
 ```
 email:someone@somewhere.com
-style:/path/to/style.jpg
-content:/path/to/content.jpg
-output:/path/to/out.png
+style:/path/to/first_attached_file.jpg
+content:/path/to/second_attached_file.jpg
+output:/path/to/job
 ```
 
 # References

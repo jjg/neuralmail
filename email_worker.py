@@ -8,7 +8,7 @@ import syslog
 from config import config
 
 # Check to see if a job is running
-syslog.openlog(ident="neuromail")
+syslog.openlog(ident="neuralmail")
 syslog.syslog(syslog.LOG_INFO, "Checking for new jobs.")
 
 print(f"{config['job_dir']}/job.txt")
